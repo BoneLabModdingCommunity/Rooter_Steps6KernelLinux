@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DREAMY ROOT v13.37</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .shadow-text {
+            font-size: 5.2rem;
+            text-shadow: 
+                0 0 15px #0f0,
+                0 0 35px #0ff,
+                0 0 60px #0f8,
+                6px 8px 0 #001100,
+                -6px -8px 0 #001100;
+            margin: 15px 0 10px;
+            letter-spacing: 12px;
+            animation: dreamglow 1.2s infinite alternate;
+            user-select: none;
+            cursor: pointer;
+        }
+        
+        .ascii-container {
+            position: relative;
+            margin: 10px auto;
+            display: inline-block;
+        }
+        
+        .ascii-shadow {
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            color: #002200;
+            font-size: 1.35rem;
+            line-height: 1.05;
+            white-space: pre;
+            opacity: 0.7;
+            z-index: 1;
+            filter: blur(1px);
+        }
+        
+        .ascii-main {
+            position: relative;
+            z-index: 2;
+            font-size: 1.35rem;
+            line-height: 1.05;
+            white-space: pre;
+            color: #0f0;
+            text-shadow: 0 0 12px #0ff;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 10px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .log {
+            background: rgba(0, 25, 0, 0.95);
+            border: 3px solid #0f0;
+            padding: 18px;
+            margin: 20px auto;
+            width: 92%;
+            max-width: 680px;
+            text-align: left;
+            height: 260px;
+            overflow-y: auto;
+            box-shadow: 0 0 35px #0f0 inset;
+            font-size: 1.25rem;
+        }
+        
+        .step {
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            opacity: 1;
+        }
+        
+        .progress {
+            height: 22px;
+            background: #001100;
+            border: 3px solid #0f0;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 620px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0f0, #00ffff, #0f0);
+            box-shadow: 0 0 20px #0ff;
+            transition: width 0.4s ease-in-out;
+        }
+        
+        button {
+            background: #000;
+            color: #0f0;
+            border: 4px solid #0f0;
+            padding: 15px 50px;
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin: 15px;
+            box-shadow: 0 0 25px #0f0;
+        }
+        
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 45px #0ff;
+        }
+        
+        .success {
+            color: #0ff;
+            font-size: 2.8rem;
+            animation: successpulse 0.6s infinite;
+            text-shadow: 0 0 30px #0ff;
+        }
+        
+        @keyframes dreamglow {
+            from { text-shadow: 0 0 15px #0f0, 0 0 35px #0ff, 0 0 60px #0f8; }
+            to { text-shadow: 0 0 25px #0ff, 0 0 55px #0ff, 0 0 85px #0ff; }
+        }
+        
+        @keyframes successpulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
+        
+        .frida {
+            color: #ff0;
+            animation: fridaflash 0.4s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ascii-container">
+            <pre class="ascii-shadow" id="shadowArt"></pre>
+            <pre class="ascii-main" id="mainArt"></pre>
+        </div>
+        
+        <div class="shadow-text" id="dreamy">DREAMY</div>
+        
+        <div id="status" style="font-size:1.6rem; margin:8px; color:#0a0; min-height:28px;"></div>
+        
+        <div class="progress">
+            <div class="bar" id="progressBar"></div>
+        </div>
+        
+        <div class="log" id="log"></div>
+        
+        <button id="startBtn">BEGIN SHADOW ROOT SEQUENCE</button>
+        
+        <div id="final" style="display:none; margin-top:30px;">
+            <div class="success">ROOT SUCCESSFUL ✓</div>
+            <p style="color:#0f0; font-size:1.5rem;">Full system access granted.<br>Device now belongs to DREAMY.</p>
+        </div>
+    </div>
+
+    <script>
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth < 850 && 'ontouchstart' in window);
+        
+        if (localStorage.getItem('dreamy_rooted') === 'true') {
+            document.body.innerHTML = `
+                <div style="height:100vh;background:#000;color:#0f0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'VT323',monospace;text-align:center;">
+                    <pre style="font-size:1.1rem;color:#003300;margin-bottom:20px;">DREAMY ROOT v13.37</pre>
+                    <div style="font-size:5.5rem;margin:20px 0;text-shadow:0 0 50px #0ff;">DREAMY</div>
+                    <div style="font-size:3rem;color:#0ff;margin:30px 0;">Device Is Already Rooted!</div>
+                    <div style="max-width:600px;color:#0a0;">Superuser privileges active.<br>Shadow access confirmed.</div>
+                </div>`;
+        } else {
+            const asciiMain = document.getElementById('mainArt');
+            const asciiShadow = document.getElementById('shadowArt');
+            
+            const dreamyAscii = `
+   ██████╗ ██████╗ ███████╗ █████╗ ███╗   ███╗██╗   ██╗
+   ██╔══██╗██╔══██╗██╔════╝██╔══██╗████╗ ████║╚██╗ ██╔╝
+   ██║  ██║██████╔╝█████╗  ███████║██╔████╔██║ ╚████╔╝ 
+   ██║  ██║██╔══██╗██╔══╝  ██╔══██║██║╚██╔╝██║  ╚██╔╝  
+   ██████╔╝██║  ██║███████╗██║  ██║██║ ╚═╝ ██║   ██║   
+   ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝   ╚═╝   
+            `;
+            
+            asciiMain.textContent = dreamyAscii;
+            asciiShadow.textContent = dreamyAscii;
+            
+            const log = document.getElementById('log');
+            const progressBar = document.getElementById('progressBar');
+            const status = document.getElementById('status');
+            const startBtn = document.getElementById('startBtn');
+            const final = document.getElementById('final');
+            
+            const steps = [
+                "Establishing encrypted tunnel to DREAMY shadow node...",
+                "Loading Frida gadget server...",
+                "Injecting Frida into zygote process...",
+                "Hooking system libraries via Frida...",
+                "Bypassing SafetyNet & Play Integrity...",
+                "Exploiting kernel via shadow payload...",
+                "Gaining persistent root via magisk-like module...",
+                "Mounting /system as rw...",
+                "Patching SELinux → permissive mode...",
+                "Installing DREAMY root manager daemon...",
+                "Verifying full superuser access..."
+            ];
+            
+            let progress = 0;
+            
+            function addLog(text, isFrida = false) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const entry = document.createElement('div');
+                        entry.className = 'step';
+                        if (isFrida) {
+                            entry.innerHTML = `<span class="frida">[FRIDA]</span> ${text}`;
+                        } else {
+                            entry.textContent = `> ${text}`;
+                        }
+                        log.appendChild(entry);
+                        log.scrollTop = log.scrollHeight;
+                        setTimeout(() => entry.classList.add('active'), 30);
+                        resolve();
+                    }, Math.random() * 650 + 280);
+                });
+            }
+            
+            async function startRooting() {
+                startBtn.style.display = 'none';
+                status.textContent = "INITIALIZING SHADOW ROOT...";
+                
+                // Fake Frida phase
+                await addLog("Starting Frida server on device...", true);
+                await new Promise(r => setTimeout(r, 850));
+                await addLog("Frida attached to system_server", true);
+                await addLog("Hooking com.android.systemui...", true);
+                progress = 25;
+                progressBar.style.width = '25%';
+                
+                for (let i = 0; i < steps.length; i++) {
+                    const step = steps[i];
+                    const baseDelay = i > 5 ? 420 : 680;
+                    await addLog(step);
+                    
+                    const increment = (i === 3 || i === 6) ? 14 : 7;
+                    progress = Math.min(100, progress + increment);
+                    progressBar.style.width = progress + '%';
+                    
+                    if (i === 4) status.textContent = "ELEVATING TO ROOT...";
+                    if (i === 8) status.textContent = "FINALIZING SHADOW ACCESS...";
+                }
+                
+                await addLog("Root acquisition complete. DREAMY owns this device.", false);
+                progressBar.style.width = '100%';
+                
+                setTimeout(() => {
+                    final.style.display = 'block';
+                    localStorage.setItem('dreamy_rooted', 'true');
+                    
+                    if (isMobile) {
+                        setTimeout(() => {
+                            const restartOverlay = document.createElement('div');
+                            restartOverlay.style.cssText = `
+                                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                                background: #000; color: #0f0; display: flex;
+                                align-items: center; justify-content: center; z-index: 10000;
+                                flex-direction: column; font-size: 2.4rem; text-shadow: 0 0 20px #0ff;
+                            `;
+                            restartOverlay.innerHTML = `
+                                <div>DEVICE RESTARTING...</div>
+                                <div style="margin-top:60px;font-size:1.5rem;color:#0a0;">DREAMY has full control</div>
+                                <div style="margin-top:80px;font-size:1.1rem;">Rebooting in shadow mode...</div>
+                            `;
+                            document.body.appendChild(restartOverlay);
+                            
+                            setTimeout(() => {
+                                window.location.reload(true);
+                            }, 1950);
+                        }, 1100);
+                    }
+                }, 900);
+            }
+            
+            startBtn.addEventListener('click', startRooting);
+            
+            // Clickable DREAMY
+            document.getElementById('dreamy').addEventListener('click', () => {
+                if (Math.random() > 0.65) {
+                    addLog("Shadow echo received from core...", false);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
