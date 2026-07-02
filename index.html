@@ -14,302 +14,321 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            text-align: center;
+            line-height: 1.1;
         }
         
+        .screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .screen.active { display: flex; }
+        
         .shadow-text {
-            font-size: 5.2rem;
+            font-size: 5.4rem;
             text-shadow: 
-                0 0 15px #0f0,
-                0 0 35px #0ff,
-                0 0 60px #0f8,
-                6px 8px 0 #001100,
-                -6px -8px 0 #001100;
-            margin: 15px 0 10px;
+                0 0 18px #0f0,
+                0 0 45px #0ff,
+                6px 8px 2px #001100,
+                -5px -7px 2px #001100;
             letter-spacing: 12px;
-            animation: dreamglow 1.2s infinite alternate;
-            user-select: none;
-            cursor: pointer;
+            animation: dreamglow 1.6s infinite alternate;
         }
         
         .ascii-container {
             position: relative;
-            margin: 10px auto;
-            display: inline-block;
+            margin: 10px 0;
         }
         
-        .ascii-shadow {
-            position: absolute;
-            top: 6px;
-            left: 8px;
-            color: #002200;
-            font-size: 1.35rem;
-            line-height: 1.05;
-            white-space: pre;
-            opacity: 0.7;
-            z-index: 1;
-            filter: blur(1px);
+        .ascii-shadow { 
+            position: absolute; top: 9px; left: 11px; 
+            color: #002200; opacity: 0.8; filter: blur(2px);
+            font-size: 1.25rem; line-height: 1.05; white-space: pre;
         }
         
         .ascii-main {
-            position: relative;
-            z-index: 2;
-            font-size: 1.35rem;
-            line-height: 1.05;
-            white-space: pre;
-            color: #0f0;
-            text-shadow: 0 0 12px #0ff;
+            font-size: 1.25rem; line-height: 1.05; white-space: pre;
+            color: #0f0; text-shadow: 0 0 10px #0ff;
         }
         
-        .container {
-            max-width: 100%;
-            padding: 10px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        button {
+            background: #111;
+            color: #0f0;
+            border: 3px solid #0f0;
+            padding: 16px 40px;
+            font-size: 1.75rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px #0f0;
+            transition: all 0.2s;
+        }
+        
+        button:hover:not(:disabled) {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 35px #0ff;
+        }
+        
+        input {
+            background: #000;
+            border: 3px solid #0f0;
+            color: #0f0;
+            padding: 12px;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            width: 320px;
+            text-align: center;
         }
         
         .log {
-            background: rgba(0, 25, 0, 0.95);
-            border: 3px solid #0f0;
-            padding: 18px;
-            margin: 20px auto;
-            width: 92%;
-            max-width: 680px;
-            text-align: left;
-            height: 260px;
-            overflow-y: auto;
-            box-shadow: 0 0 35px #0f0 inset;
-            font-size: 1.25rem;
-        }
-        
-        .step {
-            opacity: 0;
-            transition: all 0.3s;
-        }
-        
-        .step.active {
-            opacity: 1;
-        }
-        
-        .progress {
-            height: 22px;
             background: #001100;
             border: 3px solid #0f0;
-            margin: 20px auto;
-            width: 90%;
+            padding: 15px;
+            width: 88%;
+            max-width: 640px;
+            height: 260px;
+            overflow-y: auto;
+            text-align: left;
+            box-shadow: 0 0 25px #0f0 inset;
+        }
+        
+        .step { margin: 4px 0; opacity: 0; }
+        .step.active { opacity: 1; }
+        
+        .progress {
+            height: 24px;
+            background: #001100;
+            border: 3px solid #0f0;
+            width: 88%;
             max-width: 620px;
-            position: relative;
-            overflow: hidden;
+            margin: 20px 0;
         }
         
         .bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #0f0, #00ffff, #0f0);
-            box-shadow: 0 0 20px #0ff;
-            transition: width 0.4s ease-in-out;
+            background: linear-gradient(90deg, #0f0, #22ffcc);
+            transition: width 0.6s linear;
         }
         
-        button {
-            background: #000;
-            color: #0f0;
-            border: 4px solid #0f0;
-            padding: 15px 50px;
-            font-family: 'VT323', monospace;
-            font-size: 1.8rem;
-            cursor: pointer;
-            margin: 15px;
-            box-shadow: 0 0 25px #0f0;
-        }
-        
-        button:hover {
-            background: #0f0;
-            color: #000;
-            box-shadow: 0 0 45px #0ff;
-        }
-        
-        .success {
-            color: #0ff;
-            font-size: 2.8rem;
-            animation: successpulse 0.6s infinite;
-            text-shadow: 0 0 30px #0ff;
+        .success { 
+            color: #0ff; 
+            font-size: 2.9rem; 
+            animation: successpulse 800ms infinite; 
         }
         
         @keyframes dreamglow {
-            from { text-shadow: 0 0 15px #0f0, 0 0 35px #0ff, 0 0 60px #0f8; }
-            to { text-shadow: 0 0 25px #0ff, 0 0 55px #0ff, 0 0 85px #0ff; }
+            from { text-shadow: 0 0 18px #0f0, 0 0 45px #0ff; }
+            to { text-shadow: 0 0 30px #0ff, 0 0 75px #0ff; }
         }
         
         @keyframes successpulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.12); }
-        }
-        
-        .frida {
-            color: #ff0;
-            animation: fridaflash 0.4s infinite;
+            50% { transform: scale(1.08); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <!-- STEP SCREEN -->
+    <div id="stepScreen" class="screen active">
+        <div class="ascii-container">
+            <pre class="ascii-shadow">DREAMY ROOT v13.37</pre>
+            <pre class="ascii-main">DREAMY ROOT v13.37</pre>
+        </div>
+        <div class="shadow-text">DREAMY</div>
+        
+        <h2 style="color:#0ff;margin:20px 0 8px;">PRE-ROOT SETUP</h2>
+        
+        <button id="step1Btn">Step 1: Get Hacked FireFox</button>
+        
+        <button id="step2Btn" disabled>Step 2: Enter Meta Account ID</button>
+        
+        <div id="metaInput" style="display:none; margin-top:10px;">
+            <input type="text" id="metaId" placeholder="META ACCOUNT ID" maxlength="20">
+            <button id="submitMeta" style="margin-top:8px;">SUBMIT ID</button>
+        </div>
+        
+        <button id="step3Btn" disabled>Step 3: Connect to Shadow Server</button>
+        
+        <div id="stepMsg" style="margin-top:25px; min-height:30px; font-size:1.5rem;color:#0a0;"></div>
+    </div>
+
+    <!-- ROOT SCREEN -->
+    <div id="rootScreen" class="screen">
         <div class="ascii-container">
             <pre class="ascii-shadow" id="shadowArt"></pre>
             <pre class="ascii-main" id="mainArt"></pre>
         </div>
+        <div class="shadow-text">DREAMY</div>
         
-        <div class="shadow-text" id="dreamy">DREAMY</div>
+        <div id="rootStatus" style="font-size:1.6rem;color:#0a0;margin:10px;">ROOT SEQUENCE ACTIVE</div>
         
-        <div id="status" style="font-size:1.6rem; margin:8px; color:#0a0; min-height:28px;"></div>
-        
-        <div class="progress">
-            <div class="bar" id="progressBar"></div>
-        </div>
+        <div class="progress"><div class="bar" id="progressBar"></div></div>
         
         <div class="log" id="log"></div>
         
-        <button id="startBtn">BEGIN SHADOW ROOT SEQUENCE</button>
-        
-        <div id="final" style="display:none; margin-top:30px;">
-            <div class="success">ROOT SUCCESSFUL ✓</div>
-            <p style="color:#0f0; font-size:1.5rem;">Full system access granted.<br>Device now belongs to DREAMY.</p>
-        </div>
+        <button id="startRoot" style="display:none;margin-top:15px;">START ROOT EXPLOIT</button>
     </div>
 
     <script>
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth < 850 && 'ontouchstart' in window);
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Quest/i.test(navigator.userAgent);
         
         if (localStorage.getItem('dreamy_rooted') === 'true') {
-            document.body.innerHTML = `
-                <div style="height:100vh;background:#000;color:#0f0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'VT323',monospace;text-align:center;">
-                    <pre style="font-size:1.1rem;color:#003300;margin-bottom:20px;">DREAMY ROOT v13.37</pre>
-                    <div style="font-size:5.5rem;margin:20px 0;text-shadow:0 0 50px #0ff;">DREAMY</div>
-                    <div style="font-size:3rem;color:#0ff;margin:30px 0;">Device Is Already Rooted!</div>
-                    <div style="max-width:600px;color:#0a0;">Superuser privileges active.<br>Shadow access confirmed.</div>
-                </div>`;
+            document.body.innerHTML = `<div style="height:100vh;background:#000;color:#0f0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
+                <div style="font-size:5.5rem;margin:20px;text-shadow:0 0 50px #0ff;">DREAMY</div>
+                <div style="font-size:3rem;color:#0ff;">Device Is Already Rooted!</div>
+            </div>`;
         } else {
-            const asciiMain = document.getElementById('mainArt');
-            const asciiShadow = document.getElementById('shadowArt');
+            // Step 1
+            document.getElementById('step1Btn').addEventListener('click', () => {
+                window.open('https://gofile.io/d/zlw7PM', '_blank');
+                setTimeout(() => {
+                    window.open('https://gofile.io/d/4Uc91M', '_blank');
+                }, 800);
+                
+                document.getElementById('step1Btn').textContent = "✓ Hacked Firefox + Files Downloaded";
+                document.getElementById('step2Btn').disabled = false;
+                document.getElementById('stepMsg').textContent = "Files ready. Next step.";
+            });
             
-            const dreamyAscii = `
+            // Step 2 - Meta ID
+            const step2Btn = document.getElementById('step2Btn');
+            step2Btn.addEventListener('click', () => {
+                document.getElementById('metaInput').style.display = 'block';
+                step2Btn.style.display = 'none';
+            });
+            
+            document.getElementById('submitMeta').addEventListener('click', () => {
+                const id = document.getElementById('metaId').value.trim();
+                const msg = document.getElementById('stepMsg');
+                
+                if (id.length > 6 && /^[a-zA-Z0-9_]+$/.test(id)) {
+                    msg.innerHTML = `<span style="color:#0f0">✓ Meta ID accepted: ${id}</span>`;
+                    document.getElementById('step3Btn').disabled = false;
+                    document.getElementById('metaInput').style.display = 'none';
+                } else {
+                    msg.innerHTML = `<span style="color:#f44">✗ Invalid Meta Account ID</span>`;
+                }
+            });
+            
+            // Step 3
+            document.getElementById('step3Btn').addEventListener('click', () => {
+                document.getElementById('stepScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('stepScreen').style.display = 'none';
+                    document.getElementById('rootScreen').classList.add('active');
+                    
+                    if (!isMobile) {
+                        document.getElementById('log').innerHTML = `<div style="color:#f80;padding:40px;text-align:center;">PC DETECTED<br><br>Root only works on Android / Quest devices.</div>`;
+                        return;
+                    }
+                    
+                    initRootProcess();
+                }, 600);
+            });
+            
+            function initRootProcess() {
+                const asciiMain = document.getElementById('mainArt');
+                const asciiShadow = document.getElementById('shadowArt');
+                asciiMain.textContent = asciiShadow.textContent = `
    ██████╗ ██████╗ ███████╗ █████╗ ███╗   ███╗██╗   ██╗
    ██╔══██╗██╔══██╗██╔════╝██╔══██╗████╗ ████║╚██╗ ██╔╝
    ██║  ██║██████╔╝█████╗  ███████║██╔████╔██║ ╚████╔╝ 
    ██║  ██║██╔══██╗██╔══╝  ██╔══██║██║╚██╔╝██║  ╚██╔╝  
    ██████╔╝██║  ██║███████╗██║  ██║██║ ╚═╝ ██║   ██║   
-   ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝   ╚═╝   
-            `;
-            
-            asciiMain.textContent = dreamyAscii;
-            asciiShadow.textContent = dreamyAscii;
-            
-            const log = document.getElementById('log');
-            const progressBar = document.getElementById('progressBar');
-            const status = document.getElementById('status');
-            const startBtn = document.getElementById('startBtn');
-            const final = document.getElementById('final');
-            
-            const steps = [
-                "Establishing encrypted tunnel to DREAMY shadow node...",
-                "Loading Frida gadget server...",
-                "Injecting Frida into zygote process...",
-                "Hooking system libraries via Frida...",
-                "Bypassing SafetyNet & Play Integrity...",
-                "Exploiting kernel via shadow payload...",
-                "Gaining persistent root via magisk-like module...",
-                "Mounting /system as rw...",
-                "Patching SELinux → permissive mode...",
-                "Installing DREAMY root manager daemon...",
-                "Verifying full superuser access..."
-            ];
-            
-            let progress = 0;
-            
-            function addLog(text, isFrida = false) {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        const entry = document.createElement('div');
-                        entry.className = 'step';
-                        if (isFrida) {
-                            entry.innerHTML = `<span class="frida">[FRIDA]</span> ${text}`;
-                        } else {
-                            entry.textContent = `> ${text}`;
-                        }
-                        log.appendChild(entry);
+   ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝   ╚═╝   `;
+                
+                const log = document.getElementById('log');
+                const progressBar = document.getElementById('progressBar');
+                const status = document.getElementById('rootStatus');
+                const startRootBtn = document.getElementById('startRoot');
+                
+                startRootBtn.style.display = 'block';
+                
+                const baseSteps = [
+                    "Connecting to shadow server...",
+                    "Pushing hacked Firefox profile...",
+                    "Loading Frida environment...",
+                    "Mounting system partitions..."
+                ];
+                
+                let progress = 0;
+                
+                function addLog(txt, delay = 650) {
+                    return new Promise(res => setTimeout(() => {
+                        const div = document.createElement('div');
+                        div.className = 'step';
+                        div.textContent = '> ' + txt;
+                        log.appendChild(div);
                         log.scrollTop = log.scrollHeight;
-                        setTimeout(() => entry.classList.add('active'), 30);
-                        resolve();
-                    }, Math.random() * 650 + 280);
-                });
-            }
-            
-            async function startRooting() {
-                startBtn.style.display = 'none';
-                status.textContent = "INITIALIZING SHADOW ROOT...";
-                
-                // Fake Frida phase
-                await addLog("Starting Frida server on device...", true);
-                await new Promise(r => setTimeout(r, 850));
-                await addLog("Frida attached to system_server", true);
-                await addLog("Hooking com.android.systemui...", true);
-                progress = 25;
-                progressBar.style.width = '25%';
-                
-                for (let i = 0; i < steps.length; i++) {
-                    const step = steps[i];
-                    const baseDelay = i > 5 ? 420 : 680;
-                    await addLog(step);
-                    
-                    const increment = (i === 3 || i === 6) ? 14 : 7;
-                    progress = Math.min(100, progress + increment);
-                    progressBar.style.width = progress + '%';
-                    
-                    if (i === 4) status.textContent = "ELEVATING TO ROOT...";
-                    if (i === 8) status.textContent = "FINALIZING SHADOW ACCESS...";
+                        setTimeout(() => div.classList.add('active'), 50);
+                        res();
+                    }, delay));
                 }
                 
-                await addLog("Root acquisition complete. DREAMY owns this device.", false);
-                progressBar.style.width = '100%';
-                
-                setTimeout(() => {
-                    final.style.display = 'block';
+                startRootBtn.onclick = async () => {
+                    startRootBtn.style.display = 'none';
+                    status.textContent = "EXPLOITING DEVICE...";
+                    
+                    for (let step of baseSteps) {
+                        await addLog(step, 900 + Math.random()*700);
+                        progress += 12;
+                        progressBar.style.width = progress + '%';
+                    }
+                    
+                    // Cheese file
+                    await addLog("Waiting for Cheese file selection...", 1200);
+                    if (!confirm("Select the Cheese file you downloaded earlier")) {
+                        alert("Cheese file required for exploit.");
+                        return;
+                    }
+                    await addLog("Cheese file loaded successfully", 800);
+                    progress += 18;
+                    progressBar.style.width = progress + '%';
+                    
+                    // More steps
+                    await addLog("Injecting payload...", 1100);
+                    await addLog("Bypassing kernel protections...", 1300);
+                    progress += 22;
+                    progressBar.style.width = progress + '%';
+                    
+                    // Frida
+                    await addLog("Frida file required...", 1000);
+                    if (!confirm("Select the Frida gadget file")) {
+                        alert("Frida is required.");
+                        return;
+                    }
+                    await addLog("Frida injected.", 900);
+                    progress = 85;
+                    progressBar.style.width = '85%';
+                    
+                    // Final phase
+                    await addLog("Applying root persistence...", 1400);
+                    await addLog("Finalizing DREAMY shadow access...", 1600);
+                    progress = 100;
+                    progressBar.style.width = '100%';
+                    
+                    status.innerHTML = `<span style="color:#0ff">ROOT COMPLETE</span>`;
+                    log.innerHTML += `<div style="color:#0ff;margin-top:15px;">✓ Device fully compromised by DREAMY</div>`;
+                    
                     localStorage.setItem('dreamy_rooted', 'true');
                     
                     if (isMobile) {
                         setTimeout(() => {
-                            const restartOverlay = document.createElement('div');
-                            restartOverlay.style.cssText = `
-                                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                                background: #000; color: #0f0; display: flex;
-                                align-items: center; justify-content: center; z-index: 10000;
-                                flex-direction: column; font-size: 2.4rem; text-shadow: 0 0 20px #0ff;
-                            `;
-                            restartOverlay.innerHTML = `
-                                <div>DEVICE RESTARTING...</div>
-                                <div style="margin-top:60px;font-size:1.5rem;color:#0a0;">DREAMY has full control</div>
-                                <div style="margin-top:80px;font-size:1.1rem;">Rebooting in shadow mode...</div>
-                            `;
-                            document.body.appendChild(restartOverlay);
-                            
-                            setTimeout(() => {
-                                window.location.reload(true);
-                            }, 1950);
-                        }, 1100);
+                            const overlay = document.createElement('div');
+                            overlay.style.cssText = "position:fixed;inset:0;background:#000;color:#0f0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2.8rem;z-index:9999;";
+                            overlay.innerHTML = `RESTARTING DEVICE...<div style="font-size:1.5rem;margin-top:50px;">DREAMY has control</div>`;
+                            document.body.appendChild(overlay);
+                            setTimeout(() => location.reload(), 2300);
+                        }, 1400);
                     }
-                }, 900);
+                };
             }
-            
-            startBtn.addEventListener('click', startRooting);
-            
-            // Clickable DREAMY
-            document.getElementById('dreamy').addEventListener('click', () => {
-                if (Math.random() > 0.65) {
-                    addLog("Shadow echo received from core...", false);
-                }
-            });
         }
     </script>
 </body>
